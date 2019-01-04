@@ -1,16 +1,15 @@
 package com.zhenikhov.controller;
 
-import com.zhenikhov.dto.Invoice;
+import com.itextpdf.text.DocumentException;
+import com.zhenikhov.dto.InvoiceFactory;
 import com.zhenikhov.dto.Result;
 import com.zhenikhov.entity.CardPayment;
 import com.zhenikhov.entity.RequestedPayment;
 import com.zhenikhov.repository.CardPaymentRepository;
 import com.zhenikhov.repository.RequestedPaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/client")
@@ -32,11 +31,9 @@ public class PaymentController {
         return new Result(true, null);
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/invoice")
-    public Invoice getInvoiceOperation(@RequestBody RequestedPayment payment) {
-        //TODO: return invoice
-
-        return new Invoice();
+    @RequestMapping(method = RequestMethod.POST, path = "/invoice", produces = MediaType.APPLICATION_PDF_VALUE)
+    public @ResponseBody byte[] getInvoiceOperation(@RequestBody RequestedPayment payment) throws DocumentException {
+        return InvoiceFactory.createInvoice(payment);
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/create-payment")

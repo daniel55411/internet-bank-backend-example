@@ -12,8 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.web.bind.annotation.*;
 
-import javax.smartcardio.Card;
-import javax.websocket.server.PathParam;
 import java.util.Optional;
 
 @RestController
@@ -48,7 +46,7 @@ public class AdminController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/mark-unsafe-card-payment/{id}")
-    public Result markUnsafeCardPayment(@PathParam("id") Integer id) {
+    public Result markUnsafeCardPayment(@PathVariable("id") Integer id) {
         Optional<CardPayment> optional = cardPaymentRepository.findById(id);
         if (optional.isPresent()) {
             CardPayment payment = optional.get();
