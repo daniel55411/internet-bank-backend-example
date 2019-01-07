@@ -4,12 +4,10 @@ import com.zhenikhov.dto.Result;
 import com.zhenikhov.entity.CardPayment;
 import com.zhenikhov.entity.RequestedPayment;
 import com.zhenikhov.repository.CardPaymentRepository;
+import com.zhenikhov.repository.PaymentRepository;
 import com.zhenikhov.repository.RequestedPaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -17,6 +15,12 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
+    private static final ExampleMatcher MATCHER = ExampleMatcher.matchingAll()
+            .withIgnoreNullValues()
+            .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+            .withMatcher("id", ExampleMatcher.GenericPropertyMatcher::startsWith)
+            .withMatcher("transferAmount", ExampleMatcher.GenericPropertyMatcher::startsWith);
+
     private CardPaymentRepository cardPaymentRepository;
     private RequestedPaymentRepository requestedPaymentRepository;
 
@@ -33,7 +37,17 @@ public class AdminController {
             @RequestParam(name = "to", defaultValue = "-1") Integer size,
             @RequestParam(name = "sort-order", defaultValue = "asc") String sortOrder,
             @RequestParam(name = "sort-field", defaultValue = "id") String[] sortFields) {
-        return getPayments(cardPaymentRepository, page, size, sortOrder, sortFields);
+        return getPayments(cardPaymentRepository, new CardPayment(), page, size, sortOrder, sortFields);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/get-card-payments")
+    public Iterable<CardPayment> getCardPayments(
+            @RequestParam(name = "from", defaultValue = "0") Integer page,
+            @RequestParam(name = "to", defaultValue = "-1") Integer size,
+            @RequestParam(name = "sort-order", defaultValue = "asc") String sortOrder,
+            @RequestParam(name = "sort-field", defaultValue = "id") String[] sortFields,
+            @RequestBody CardPayment payment) {
+        return getPayments(cardPaymentRepository, payment, page, size, sortOrder, sortFields);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/get-requested-payments")
@@ -42,7 +56,17 @@ public class AdminController {
             @RequestParam(name = "to", defaultValue = "-1") Integer size,
             @RequestParam(name = "sort-order", defaultValue = "asc") String sortOrder,
             @RequestParam(name = "sort-field", defaultValue = "id") String[] sortFields) {
-        return getPayments(requestedPaymentRepository, page, size, sortOrder, sortFields);
+        return getPayments(requestedPaymentRepository, new RequestedPayment(), page, size, sortOrder, sortFields);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/get-requested-payments")
+    public Iterable<RequestedPayment> getRequestedPayments(
+            @RequestParam(name = "from", defaultValue = "0") Integer page,
+            @RequestParam(name = "to", defaultValue = "-1") Integer size,
+            @RequestParam(name = "sort-order", defaultValue = "asc") String sortOrder,
+            @RequestParam(name = "sort-field", defaultValue = "id") String[] sortFields,
+            @RequestBody RequestedPayment payment) {
+        return getPayments(requestedPaymentRepository, payment, page, size, sortOrder, sortFields);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/mark-unsafe-card-payment/{id}")
@@ -60,19 +84,21 @@ public class AdminController {
     }
 
     private <T> Iterable<T> getPayments(
-            PagingAndSortingRepository<T, Integer> repository,
+            PaymentRepository<T> repository,
+            T payment,
             Integer page,
             Integer size,
             String sortOrder,
             String[] sortFields) {
+        Example<T> example = Example.of(payment, MATCHER);
         Sort sort = new Sort(direction(sortOrder), sortFields);
 
         if (size == -1) {
-            return repository.findAll(sort);
+            return repository.findAll(example, sort);
         }
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        return repository.findAll(pageable);
+        return repository.findAll(example, pageable);
     }
 
     private Sort.Direction direction(String dir) {

@@ -1,10 +1,8 @@
 package com.zhenikhov.repository;
 
 import com.zhenikhov.entity.CardPayment;
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.QueryByExampleExecutor;
+import org.springframework.stereotype.Repository;
 
-public interface CardPaymentRepository extends
-        PagingAndSortingRepository<CardPayment, Integer>,
-        QueryByExampleExecutor<CardPayment> {
+@Repository
+public interface CardPaymentRepository extends PaymentRepository<CardPayment>{
 }
