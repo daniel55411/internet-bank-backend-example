@@ -18,6 +18,8 @@ public class CardPayment {
     @Pattern(regexp = "^\\d{16}$")
     private String cardNumber;
 
+    private String username;
+
     @Min(1000)
     @Max(75000)
     private Integer transferAmount;
@@ -100,5 +102,13 @@ public class CardPayment {
 
     public void setUnsafe(Boolean unsafe) {
         this.unsafe = unsafe;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

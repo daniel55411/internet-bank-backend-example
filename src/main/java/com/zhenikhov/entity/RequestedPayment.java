@@ -14,6 +14,8 @@ public class RequestedPayment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    private String username;
+
     @Pattern(regexp = "^\\d{10}|\\d{12}$")
     private String TIN;
 
@@ -96,5 +98,13 @@ public class RequestedPayment {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
