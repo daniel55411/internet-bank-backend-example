@@ -2,24 +2,21 @@ package com.zhenikhov.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.Pattern;
 
 @Entity
 public class BankClient {
     @Id
+    @GeneratedValue
+    private Integer id;
+
     @Column(unique = true)
     private String login;
 
     private String password;
 
-    @Pattern(regexp = "^\\w{3,}@\\w{2,}\\.\\w{2,}$")
-    private String email;
-
-    @Pattern(regexp = "^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$")
-    private String phoneNumber;
-
-    private String FIO;
+    private String roles;
 
     public String getLogin() {
         return login;
@@ -37,27 +34,19 @@ public class BankClient {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public Integer getId() {
+        return id;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getRoles() {
+        return roles;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getFIO() {
-        return FIO;
-    }
-
-    public void setFIO(String FIO) {
-        this.FIO = FIO;
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 }

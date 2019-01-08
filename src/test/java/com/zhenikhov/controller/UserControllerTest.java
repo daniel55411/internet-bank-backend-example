@@ -9,17 +9,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class PaymentControllerTest {
+public class UserControllerTest {
     private static final ObjectWriter WRITER = new ObjectMapper().writer();
 
     @Autowired
@@ -29,7 +26,7 @@ public class PaymentControllerTest {
     private RequestedPaymentRepository requestedPaymentRepository;
 
     @Autowired
-    private PaymentController controller;
+    private UserController controller;
 
     private MockMvc mockMvc;
 

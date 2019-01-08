@@ -3,25 +3,55 @@ package com.zhenikhov.controller;
 import com.itextpdf.text.DocumentException;
 import com.zhenikhov.dto.InvoiceFactory;
 import com.zhenikhov.dto.Result;
+import com.zhenikhov.entity.BankClient;
+import com.zhenikhov.entity.BankClientInfo;
 import com.zhenikhov.entity.CardPayment;
 import com.zhenikhov.entity.RequestedPayment;
+import com.zhenikhov.repository.BankClientInfoRepository;
+import com.zhenikhov.repository.BankClientRepository;
 import com.zhenikhov.repository.CardPaymentRepository;
 import com.zhenikhov.repository.RequestedPaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.security.Principal;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/client")
-public class PaymentController {
+public class UserController {
     private CardPaymentRepository cardPaymentRepository;
     private RequestedPaymentRepository requestedPaymentRepository;
+    private BankClientInfoRepository bankClientInfoRepository;
+    private BankClientRepository bankClientRepository;
 
     @Autowired
-    public PaymentController(CardPaymentRepository cardPaymentRepository,
-                             RequestedPaymentRepository requestedPaymentRepository) {
+    public UserController(CardPaymentRepository cardPaymentRepository,
+                          RequestedPaymentRepository requestedPaymentRepository,
+                          BankClientInfoRepository bankClientInfoRepository,
+                          BankClientRepository bankClientRepository) {
         this.cardPaymentRepository = cardPaymentRepository;
         this.requestedPaymentRepository = requestedPaymentRepository;
+        this.bankClientInfoRepository = bankClientInfoRepository;
+        this.bankClientRepository = bankClientRepository;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/info")
+    public BankClientInfo bankClientInfo(Principal principal) throws UserPrincipalNotFoundException {
+        Optional<BankClient> optionalClient = bankClientRepository.findBankClientByLogin(principal.getName());
+        if (optionalClient.isPresent()) {
+            Optional<BankClientInfo> optionalInfo = bankClientInfoRepository.findById(optionalClient.get().getId());
+            if (optionalInfo.isPresent()) {
+                return optionalInfo.get();
+            }
+
+            throw new UserPrincipalNotFoundException(principal.getName());
+
+        }
+
+        throw new UserPrincipalNotFoundException(principal.getName());
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/pay")
