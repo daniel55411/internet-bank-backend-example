@@ -15,7 +15,7 @@ public class BankClientInfo {
     @Pattern(regexp = "^\\w{3,}@\\w{2,}\\.\\w{2,}$")
     private String email;
 
-    @Pattern(regexp = "^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$")
+    @Pattern(regexp = "^(\\+\\d\\s?)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{2}[\\s.-]?\\d{2}$")
     private String phoneNumber;
 
     private String FIO;

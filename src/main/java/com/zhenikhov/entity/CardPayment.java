@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
-public class CardPayment extends BankClientPayment{
+public class CardPayment implements BankClientPayment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -22,6 +22,7 @@ public class CardPayment extends BankClientPayment{
     @Max(75000)
     private Integer transferAmount;
 
+    private Integer bankClientId;
 
     @Pattern(regexp = "^\\d{2}/\\d{2}$")
     private String cardDate;
@@ -100,5 +101,15 @@ public class CardPayment extends BankClientPayment{
 
     public void setUnsafe(Boolean unsafe) {
         this.unsafe = unsafe;
+    }
+
+    @Override
+    public Integer getBankClientId() {
+        return bankClientId;
+    }
+
+    @Override
+    public void setBankClientId(Integer bankClientId) {
+        this.bankClientId = bankClientId;
     }
 }

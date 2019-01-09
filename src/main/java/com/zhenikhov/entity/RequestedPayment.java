@@ -1,15 +1,20 @@
 package com.zhenikhov.entity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
 @Entity
-public class RequestedPayment extends BankClientPayment {
+public class RequestedPayment implements BankClientPayment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
+    private Integer bankClientId;
 
     @Pattern(regexp = "^\\d{10}|\\d{12}$")
     private String TIN;
@@ -25,7 +30,7 @@ public class RequestedPayment extends BankClientPayment {
     @Pattern(regexp = "^\\d{20}$")
     private String accountNumber;
 
-    @Pattern(regexp = "^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$")
+    @Pattern(regexp = "^(\\+\\d\\s?)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{2}[\\s.-]?\\d{2}$")
     private String phoneNumber;
 
     @Pattern(regexp = "^\\w{3,}@\\w{2,}\\.\\w{2,}$")
@@ -93,5 +98,15 @@ public class RequestedPayment extends BankClientPayment {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public Integer getBankClientId() {
+        return bankClientId;
+    }
+
+    @Override
+    public void setBankClientId(Integer bankClientId) {
+        this.bankClientId = bankClientId;
     }
 }

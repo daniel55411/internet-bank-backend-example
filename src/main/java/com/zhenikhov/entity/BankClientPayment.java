@@ -1,14 +1,8 @@
 package com.zhenikhov.entity;
 
 
-public abstract class BankClientPayment {
-    private Integer bankClientId;
+public interface BankClientPayment {
+    Integer getBankClientId();
 
-    public Integer getBankClientId() {
-        return bankClientId;
-    }
-
-    public void setBankClientId(Integer bankClientId) {
-        this.bankClientId = bankClientId;
-    }
+    void setBankClientId(Integer bankClientId);
 }
