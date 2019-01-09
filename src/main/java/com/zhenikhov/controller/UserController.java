@@ -13,6 +13,7 @@ import com.zhenikhov.repository.CardPaymentRepository;
 import com.zhenikhov.repository.RequestedPaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
@@ -39,7 +40,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/info")
-    public BankClientInfo bankClientInfo(Principal principal) throws UserPrincipalNotFoundException {
+    public BankClientInfo bankClientInfo(@AuthenticationPrincipal Principal principal) throws UserPrincipalNotFoundException {
         Optional<BankClient> optionalClient = bankClientRepository.findBankClientByLogin(principal.getName());
         if (optionalClient.isPresent()) {
             Optional<BankClientInfo> optionalInfo = bankClientInfoRepository

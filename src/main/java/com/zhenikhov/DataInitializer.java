@@ -34,7 +34,7 @@ public class DataInitializer implements InitializingBean {
         BankClientInfo bankClientInfo = new BankClientInfo();
         bankClientInfo.setBankClientId(1);
         bankClientInfo.setEmail("example@example.com");
-        bankClientInfo.setFIO("Иванов Иван Иванович");
+        bankClientInfo.setFIO("Ivanov Ivan Ivanovich");
         bankClientInfo.setPhoneNumber("+7 (999) 999-99-99");
         bankClientInfo.setId(1);
 
