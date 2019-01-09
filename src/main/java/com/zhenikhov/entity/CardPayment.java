@@ -10,15 +10,13 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
-public class CardPayment {
+public class CardPayment extends BankClientPayment{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Pattern(regexp = "^\\d{16}$")
     private String cardNumber;
-
-    private String username;
 
     @Min(1000)
     @Max(75000)
@@ -102,13 +100,5 @@ public class CardPayment {
 
     public void setUnsafe(Boolean unsafe) {
         this.unsafe = unsafe;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 }

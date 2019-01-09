@@ -16,8 +16,6 @@ public class BankClient {
 
     private String password;
 
-    private String roles;
-
     public String getLogin() {
         return login;
     }
@@ -40,13 +38,5 @@ public class BankClient {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getRoles() {
-        return roles;
-    }
-
-    public void setRoles(String roles) {
-        this.roles = roles;
     }
 }

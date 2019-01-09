@@ -42,7 +42,8 @@ public class UserController {
     public BankClientInfo bankClientInfo(Principal principal) throws UserPrincipalNotFoundException {
         Optional<BankClient> optionalClient = bankClientRepository.findBankClientByLogin(principal.getName());
         if (optionalClient.isPresent()) {
-            Optional<BankClientInfo> optionalInfo = bankClientInfoRepository.findById(optionalClient.get().getId());
+            Optional<BankClientInfo> optionalInfo = bankClientInfoRepository
+                    .findBankClientInfoByBankClientId(optionalClient.get().getId());
             if (optionalInfo.isPresent()) {
                 return optionalInfo.get();
             }

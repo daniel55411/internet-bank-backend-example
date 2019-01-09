@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 @Configuration
@@ -17,19 +16,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final RestAuthenticationEntryPoint entryPoint;
     private final AuthSuccessHandler successHandler;
     private final SimpleUrlAuthenticationFailureHandler failureHandler;
-    private final PasswordEncoder encoder;
     private final AuthenticationProvider authenticationProvider;
 
     @Autowired
     public SecurityConfig(RestAuthenticationEntryPoint entryPoint,
                           AuthSuccessHandler authSuccessHandler,
                           SimpleUrlAuthenticationFailureHandler failureHandler,
-                          PasswordEncoder encoder,
                           AuthenticationProvider provider) {
         this.entryPoint = entryPoint;
         this.successHandler = authSuccessHandler;
         this.failureHandler = failureHandler;
-        this.encoder = encoder;
         this.authenticationProvider = provider;
     }
 
@@ -41,14 +37,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(entryPoint)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/client/**").authenticated()
-                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("actuator/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .formLogin()
+                .formLogin().permitAll()
                 .successHandler(successHandler)
                 .failureHandler(failureHandler)
                 .and()
-                .logout();
+                .logout().permitAll();
     }
 
     @Override

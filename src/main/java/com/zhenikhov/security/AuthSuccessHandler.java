@@ -8,10 +8,8 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Component
 public class AuthSuccessHandler
@@ -23,8 +21,7 @@ public class AuthSuccessHandler
     public void onAuthenticationSuccess(
             HttpServletRequest request,
             HttpServletResponse response,
-            Authentication authentication)
-            throws ServletException, IOException {
+            Authentication authentication) {
 
         SavedRequest savedRequest
                 = requestCache.getRequest(request, response);
