@@ -8,8 +8,10 @@ import com.zhenikhov.repository.BankClientRepository;
 import com.zhenikhov.repository.CardPaymentRepository;
 import com.zhenikhov.repository.PaymentRepository;
 import com.zhenikhov.repository.RequestedPaymentRepository;
+import com.zhenikhov.utils.BankUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
@@ -44,8 +46,8 @@ public class AdminController {
             @RequestParam(name = "to", defaultValue = "-1") Integer size,
             @RequestParam(name = "sort-order", defaultValue = "asc") String sortOrder,
             @RequestParam(name = "sort-field", defaultValue = "id") String[] sortFields,
-            Principal principal) throws UserPrincipalNotFoundException {
-        Integer bankClientId = getBankClientId(principal);
+            @AuthenticationPrincipal Principal principal) throws UserPrincipalNotFoundException {
+        Integer bankClientId = BankUtils.getBankClientId(bankClientRepository, principal);
         CardPayment payment = new CardPayment();
         payment.setBankClientId(bankClientId);
         return getPayments(cardPaymentRepository, payment, page, size, sortOrder, sortFields);
@@ -58,8 +60,8 @@ public class AdminController {
             @RequestParam(name = "sort-order", defaultValue = "asc") String sortOrder,
             @RequestParam(name = "sort-field", defaultValue = "id") String[] sortFields,
             @RequestBody CardPayment payment,
-            Principal principal) throws UserPrincipalNotFoundException {
-        Integer bankClientId = getBankClientId(principal);
+            @AuthenticationPrincipal Principal principal) throws UserPrincipalNotFoundException {
+        Integer bankClientId = BankUtils.getBankClientId(bankClientRepository, principal);
         payment.setBankClientId(bankClientId);
         return getPayments(cardPaymentRepository, payment, page, size, sortOrder, sortFields);
     }
@@ -70,8 +72,8 @@ public class AdminController {
             @RequestParam(name = "to", defaultValue = "-1") Integer size,
             @RequestParam(name = "sort-order", defaultValue = "asc") String sortOrder,
             @RequestParam(name = "sort-field", defaultValue = "id") String[] sortFields,
-            Principal principal) throws UserPrincipalNotFoundException {
-        Integer bankClientId = getBankClientId(principal);
+            @AuthenticationPrincipal Principal principal) throws UserPrincipalNotFoundException {
+        Integer bankClientId = BankUtils.getBankClientId(bankClientRepository, principal);
         RequestedPayment payment = new RequestedPayment();
         payment.setBankClientId(bankClientId);
         return getPayments(requestedPaymentRepository, payment, page, size, sortOrder, sortFields);
@@ -84,17 +86,18 @@ public class AdminController {
             @RequestParam(name = "sort-order", defaultValue = "asc") String sortOrder,
             @RequestParam(name = "sort-field", defaultValue = "id") String[] sortFields,
             @RequestBody RequestedPayment payment,
-            Principal principal) throws UserPrincipalNotFoundException {
-        Integer bankClientId = getBankClientId(principal);
+            @AuthenticationPrincipal Principal principal) throws UserPrincipalNotFoundException {
+        Integer bankClientId = BankUtils.getBankClientId(bankClientRepository, principal);
         payment.setBankClientId(bankClientId);
 
         return getPayments(requestedPaymentRepository, payment, page, size, sortOrder, sortFields);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/mark-unsafe-card-payment/{id}")
-    public Result markUnsafeCardPayment(@PathVariable("id") Integer id, Principal principal)
+    public Result markUnsafeCardPayment(@PathVariable("id") Integer id,
+                                        @AuthenticationPrincipal Principal principal)
             throws UserPrincipalNotFoundException {
-        Integer bankClientId = getBankClientId(principal);
+        Integer bankClientId = BankUtils.getBankClientId(bankClientRepository, principal);
         Optional<CardPayment> optional = cardPaymentRepository.findByIdAndBankClientId(id, bankClientId);
         if (optional.isPresent()) {
             CardPayment payment = optional.get();
@@ -129,15 +132,5 @@ public class AdminController {
         return dir.equalsIgnoreCase("ASC")
                 ? Sort.Direction.ASC
                 : Sort.Direction.DESC;
-    }
-
-    private Integer getBankClientId(Principal principal)
-            throws UserPrincipalNotFoundException {
-        Optional<BankClient> optional = bankClientRepository.findBankClientByLogin(principal.getName());
-        if (optional.isPresent()) {
-            return optional.get().getId();
-        }
-
-        throw new UserPrincipalNotFoundException(null);
     }
 }

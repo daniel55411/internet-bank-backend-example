@@ -39,6 +39,9 @@ public class InvoiceFactory {
     private static void addTable(Document document, RequestedPayment payment) throws DocumentException {
         PdfPTable table = new PdfPTable(2);
 
+        table.addCell(new Phrase("Номер клиента", FONT));
+        table.addCell(new Phrase(String.valueOf(payment.getBankClientId()), FONT));
+
         table.addCell(new Phrase("Номер счета", FONT));
         table.addCell(new Phrase(payment.getAccountNumber(), FONT));
 
