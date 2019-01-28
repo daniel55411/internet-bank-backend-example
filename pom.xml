@@ -67,6 +67,13 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
+        <!-- Apache common lang -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8.1</version>
+        </dependency>
+
         <!-- PDF Writer -->
         <dependency>
             <groupId>com.itextpdf</groupId>

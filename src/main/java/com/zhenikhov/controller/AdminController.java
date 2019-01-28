@@ -1,7 +1,6 @@
 package com.zhenikhov.controller;
 
 import com.zhenikhov.dto.Result;
-import com.zhenikhov.entity.BankClient;
 import com.zhenikhov.entity.CardPayment;
 import com.zhenikhov.entity.RequestedPayment;
 import com.zhenikhov.repository.BankClientRepository;
@@ -45,12 +44,12 @@ public class AdminController {
             @RequestParam(name = "from", defaultValue = "0") Integer page,
             @RequestParam(name = "to", defaultValue = "-1") Integer size,
             @RequestParam(name = "sort-order", defaultValue = "asc") String sortOrder,
-            @RequestParam(name = "sort-field", defaultValue = "id") String[] sortFields,
+            @RequestParam(name = "sort-field", defaultValue = "id") String sortField,
             @AuthenticationPrincipal Principal principal) throws UserPrincipalNotFoundException {
         Integer bankClientId = BankUtils.getBankClientId(bankClientRepository, principal);
         CardPayment payment = new CardPayment();
         payment.setBankClientId(bankClientId);
-        return getPayments(cardPaymentRepository, payment, page, size, sortOrder, sortFields);
+        return getPayments(cardPaymentRepository, payment, page, size, sortOrder, sortField);
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/get-card-payments")
@@ -58,12 +57,12 @@ public class AdminController {
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "-1") Integer size,
             @RequestParam(name = "sort-order", defaultValue = "asc") String sortOrder,
-            @RequestParam(name = "sort-field", defaultValue = "id") String[] sortFields,
+            @RequestParam(name = "sort-field", defaultValue = "id") String sortField,
             @RequestBody CardPayment payment,
             @AuthenticationPrincipal Principal principal) throws UserPrincipalNotFoundException {
         Integer bankClientId = BankUtils.getBankClientId(bankClientRepository, principal);
         payment.setBankClientId(bankClientId);
-        return getPayments(cardPaymentRepository, payment, page, size, sortOrder, sortFields);
+        return getPayments(cardPaymentRepository, payment, page, size, sortOrder, sortField);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/get-requested-payments")
@@ -71,12 +70,12 @@ public class AdminController {
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "-1") Integer size,
             @RequestParam(name = "sort-order", defaultValue = "asc") String sortOrder,
-            @RequestParam(name = "sort-field", defaultValue = "id") String[] sortFields,
+            @RequestParam(name = "sort-field", defaultValue = "id") String sortField,
             @AuthenticationPrincipal Principal principal) throws UserPrincipalNotFoundException {
         Integer bankClientId = BankUtils.getBankClientId(bankClientRepository, principal);
         RequestedPayment payment = new RequestedPayment();
         payment.setBankClientId(bankClientId);
-        return getPayments(requestedPaymentRepository, payment, page, size, sortOrder, sortFields);
+        return getPayments(requestedPaymentRepository, payment, page, size, sortOrder, sortField);
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/get-requested-payments")
@@ -84,13 +83,13 @@ public class AdminController {
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "-1") Integer size,
             @RequestParam(name = "sort-order", defaultValue = "asc") String sortOrder,
-            @RequestParam(name = "sort-field", defaultValue = "id") String[] sortFields,
+            @RequestParam(name = "sort-field", defaultValue = "id") String sortField,
             @RequestBody RequestedPayment payment,
             @AuthenticationPrincipal Principal principal) throws UserPrincipalNotFoundException {
         Integer bankClientId = BankUtils.getBankClientId(bankClientRepository, principal);
         payment.setBankClientId(bankClientId);
 
-        return getPayments(requestedPaymentRepository, payment, page, size, sortOrder, sortFields);
+        return getPayments(requestedPaymentRepository, payment, page, size, sortOrder, sortField);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/mark-unsafe-card-payment/{id}")
@@ -116,9 +115,9 @@ public class AdminController {
             Integer page,
             Integer size,
             String sortOrder,
-            String[] sortFields) {
+            String sortField) {
         Example<T> example = Example.of(payment, MATCHER);
-        Sort sort = new Sort(direction(sortOrder), sortFields);
+        Sort sort = new Sort(direction(sortOrder), sortField);
 
         if (size == -1) {
             return repository.findAll(example, sort);

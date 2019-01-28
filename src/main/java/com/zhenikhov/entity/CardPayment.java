@@ -39,7 +39,7 @@ public class CardPayment implements BankClientPayment {
     @NotNull
     private String email;
 
-    private Boolean unsafe;
+    private Boolean unsafe = Boolean.FALSE;
 
 
     public Integer getId() {
