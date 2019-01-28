@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Entity
@@ -14,26 +15,35 @@ public class RequestedPayment implements BankClientPayment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @NotNull
     private Integer bankClientId;
 
     @Pattern(regexp = "^\\d{10}|\\d{12}$")
-    private String TIN;
+    @NotNull
+    private String tin;
 
     @Pattern(regexp = "^\\d{9}$")
-    private String BIC;
-    private Vat VAT;
+    @NotNull
+    private String bic;
+
+    @NotNull
+    private Vat vat;
 
     @Min(1000)
     @Max(75000)
+    @NotNull
     private Integer transferAmount;
 
     @Pattern(regexp = "^\\d{20}$")
+    @NotNull
     private String accountNumber;
 
     @Pattern(regexp = "^(\\+\\d\\s?)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{2}[\\s.-]?\\d{2}$")
+    @NotNull
     private String phoneNumber;
 
     @Pattern(regexp = "^\\w{3,}@\\w{2,}\\.\\w{2,}$")
+    @NotNull
     private String email;
 
     public Integer getId() {
@@ -44,28 +54,28 @@ public class RequestedPayment implements BankClientPayment {
         this.id = id;
     }
 
-    public String getTIN() {
-        return TIN;
+    public String getTin() {
+        return tin;
     }
 
-    public void setTIN(String TIN) {
-        this.TIN = TIN;
+    public void setTin(String tin) {
+        this.tin = tin;
     }
 
-    public String getBIC() {
-        return BIC;
+    public String getBic() {
+        return bic;
     }
 
-    public void setBIC(String BIC) {
-        this.BIC = BIC;
+    public void setBic(String bic) {
+        this.bic = bic;
     }
 
-    public Vat getVAT() {
-        return VAT;
+    public Vat getVat() {
+        return vat;
     }
 
-    public void setVAT(Vat VAT) {
-        this.VAT = VAT;
+    public void setVat(Vat vat) {
+        this.vat = vat;
     }
 
     public Integer getTransferAmount() {

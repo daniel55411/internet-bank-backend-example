@@ -55,8 +55,8 @@ public class AdminController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/get-card-payments")
     public Iterable<CardPayment> getCardPayments(
-            @RequestParam(name = "from", defaultValue = "0") Integer page,
-            @RequestParam(name = "to", defaultValue = "-1") Integer size,
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "size", defaultValue = "-1") Integer size,
             @RequestParam(name = "sort-order", defaultValue = "asc") String sortOrder,
             @RequestParam(name = "sort-field", defaultValue = "id") String[] sortFields,
             @RequestBody CardPayment payment,
@@ -68,8 +68,8 @@ public class AdminController {
 
     @RequestMapping(method = RequestMethod.GET, path = "/get-requested-payments")
     public Iterable<RequestedPayment> getRequestedPayments(
-            @RequestParam(name = "from", defaultValue = "0") Integer page,
-            @RequestParam(name = "to", defaultValue = "-1") Integer size,
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "size", defaultValue = "-1") Integer size,
             @RequestParam(name = "sort-order", defaultValue = "asc") String sortOrder,
             @RequestParam(name = "sort-field", defaultValue = "id") String[] sortFields,
             @AuthenticationPrincipal Principal principal) throws UserPrincipalNotFoundException {
@@ -81,8 +81,8 @@ public class AdminController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/get-requested-payments")
     public Iterable<RequestedPayment> getRequestedPayments(
-            @RequestParam(name = "from", defaultValue = "0") Integer page,
-            @RequestParam(name = "to", defaultValue = "-1") Integer size,
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "size", defaultValue = "-1") Integer size,
             @RequestParam(name = "sort-order", defaultValue = "asc") String sortOrder,
             @RequestParam(name = "sort-field", defaultValue = "id") String[] sortFields,
             @RequestBody RequestedPayment payment,

@@ -4,10 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Entity
 public class CardPayment implements BankClientPayment {
@@ -16,24 +13,30 @@ public class CardPayment implements BankClientPayment {
     private Integer id;
 
     @Pattern(regexp = "^\\d{16}$")
+    @NotNull
     private String cardNumber;
 
     @Min(1000)
     @Max(75000)
+    @NotNull
     private Integer transferAmount;
 
+    @NotNull
     private Integer bankClientId;
 
     @Pattern(regexp = "^\\d{2}/\\d{2}$")
+    @NotNull
     private String cardDate;
 
     @Pattern(regexp = "^\\d{3}$")
+    @NotNull
     private String cardCvc;
 
     @Size(max = 150)
     private String commentary;
 
     @Pattern(regexp = "^\\w{3,}@\\w{2,}\\.\\w{2,}$")
+    @NotNull
     private String email;
 
     private Boolean unsafe;
